@@ -471,7 +471,103 @@ public class rsa {
 }
         </xmp>
     </div>
-    <div class="experiment_6"></div>
-    <div class="experiment_7"></div>
+    <div class="experiment_6">
+         <h3>rsa code anjai</h3>
+        <xmp>
+import java.util.*; 
+class Exp1 
+{ 
+public static void main(String args[]) 
+{ 
+Scanner sc=new Scanner(System.in); 
+int d=0; 
+System.out.println("Enter two prime numbers"); 
+int p=sc.nextInt(); 
+int q=sc.nextInt(); 
+int n=p*q; 
+System.out.println("n="+n); 
+int e=0;
+int pn=(p-1)*(q-1); 
+search: 
+{ 
+for(int i=2;i<=pn;i++) 
+{ 
+int r; 
+int j=i; 
+int k=pn; =
+while(k != j) 
+{ 
+if(k > j) 
+k = k-j; 
+else 
+j = j-k; 
+} 
+if(k==1) 
+{ 
+e=i; 
+break search; 
+} 
+} 
+} 
+System.out.println("e="+e); 
+go:{ 
+for(int i=1;i<=pn;i++) 
+{ 
+int x=(e*i)%pn; 
+if(x==1) 
+{ 
+System.out.println("d="+i); 
+System.out.println("The private key is (d) "+i); d=i; 
+break go; 
+} 
+} 
+} 
+System.out.println("The public key is (n,e) "+n+", "+e); String t; 
+int c; 
+System.out.println("Enter plaintext"); 
+t=sc.next(); 
+int m = 0; 
+for (int i = 0; i < t.length(); i++){ 
+m += (int)t.charAt(i);
+} 
+c=((m)^e)%n; 
+System.out.println("The Encryted message is "+m); 
+m=(c^d)%n; 
+System.out.println("The decrypted message is "+t); 
+} 
+}
+
+        </xmp>
+    </div>
+    <div class="experiment_7">
+        <h3>Caesar code anjai</h3>
+        <xmp> 
+    def caesar_cipher(text, shift):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            is_upper = char.isupper()
+            char_code = ord(char.lower()) - ord('a')
+            shifted_code = (char_code + shift) % 26
+            shifted_char = chr(shifted_code + ord('a'))
+            if is_upper:
+                shifted_char = shifted_char.upper()
+            result += shifted_char
+        else:
+            result += char
+    return result
+
+# Example usage
+text = "anjali!"
+shift = 3
+encrypted_text = caesar_cipher(text, shift)
+print("Encrypted text:", encrypted_text)
+
+decrypted_text = caesar_cipher(encrypted_text, -shift)
+print("Decrypted text:", decrypted_text)
+
+            
+        </xmp>
+    </div>
 </body>
 </html>
