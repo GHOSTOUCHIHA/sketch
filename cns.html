@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cns</title>
+</head>
+<body>
+    <div class="experiment_1">
+        <h3>caesar cipher encryption code</h3>
+    <xmp>
+        import java.util.Scanner;
+
+        public class encryption {
+            public static void main(String args[]) {
+                Scanner sc = new Scanner(System.in);
+                int key = 3; // Replace with your desired key
+                System.out.print("enter the plane text : ");
+                String plaintext = sc.nextLine();
+                String encryptedText = encrypt(plaintext, key);
+                System.out.println("Encrypted Text: " + encryptedText);
+            }
+        
+            public static String encrypt(String plaintext, int key) {
+                StringBuilder encryptedText = new StringBuilder();
+        
+                for (int i = 0; i < plaintext.length(); i++) {
+                    char c = plaintext.charAt(i);
+        
+                    // Check if it's an uppercase letter
+                    if (Character.isUpperCase(c)) {
+                        encryptedText.append((char) ((c - 65 + key) % 26 + 65));
+                    }
+                    // Check if it's a lowercase letter
+                    else if (Character.isLowerCase(c)) {
+                        encryptedText.append((char) ((c - 97 + key) % 26 + 97));
+                    }
+                    // Check if it's a digit
+                    else if (Character.isDigit(c)) {
+                        encryptedText.append((char) ((c - 48 + key) % 10 + 48));
+                    }
+                    // Handle special characters in the range 32 to 47
+                    else if (c >= 32 && c <= 47) {
+                        encryptedText.append((char) ((c - 32 + key) % 16 + 32));
+                    }
+                    // Handle special characters in the range 58 to 64
+                    else if (c >= 58 && c <= 64) {
+                        encryptedText.append((char) ((c - 58 + key) % 7 + 58));
+                    }
+                    // Handle special characters in the range 91 to 96
+                    else if (c >= 91 && c <= 96) {
+                        encryptedText.append((char) ((c - 91 + key) % 6 + 91));
+                    }
+                    // Handle special characters in the range 123 to 126
+                    else if (c >= 123 && c <= 126) {
+                        encryptedText.append((char) ((c - 123 + key) % 4 + 123));
+                    }
+                    // For any other special characters, use the original character
+                    else {
+                        encryptedText.append(c);
+                    }
+                }
+        
+                return encryptedText.toString();
+            }
+        
+        }
+    
+           </xmp></div>
+    <div class="experiment_2"> 
+        <h3>caesar cipher decryption code</h3>
+        <xmp>
+            
+import java.util.Scanner;
+
+public class decryption {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("enter the cipher text : ");
+        String cipherText = sc.nextLine();
+        for (int key = 1; key <= 26; key++) {
+            String decryptedText = decrypt(cipherText, key);
+            System.out.println("Key " + key + ": " + decryptedText);
+        }
+    }
+
+    public static String decrypt(String plaintext, int key) {
+        StringBuilder decryptedText = new StringBuilder();
+
+        for (int i = 0; i < plaintext.length(); i++) {
+            char c = plaintext.charAt(i);
+
+            // Check if it's an uppercase letter
+            if (Character.isUpperCase(c)) {
+                decryptedText.append((char) ((c - 65 - key + 26) % 26 + 65));
+            }
+            // Check if it's a lowercase letter
+            else if (Character.isLowerCase(c)) {
+                decryptedText.append((char) ((c - 97 - key + 26) % 26 + 97));
+            }
+            // Check if it's a digit
+            else if (Character.isDigit(c)) {
+                decryptedText.append((char) ((c - 48 - key + 10) % 10 + 48));
+            }
+            // Handle special characters in the range 32 to 47
+            else if (c >= 32 && c <= 47) {
+                decryptedText.append((char) ((c - 32 - key + 16) % 16 + 32));
+            }
+            // Handle special characters in the range 58 to 64
+            else if (c >= 58 && c <= 64) {
+                decryptedText.append((char) ((c - 58 - key + 7) % 7 + 58));
+            }
+            // Handle special characters in the range 91 to 96
+            else if (c >= 91 && c <= 96) {
+                decryptedText.append((char) ((c - 91 - key + 6) % 6 + 91));
+            }
+            // Handle special characters in the range 123 to 126
+            else if (c >= 123 && c <= 126) {
+                decryptedText.append((char) ((c - 123 - key + 4) % 4 + 123));
+            }
+            // For any other special characters, use the original character
+            else {
+                decryptedText.append(c);
+            }
+        }
+
+        return decryptedText.toString();
+    }
+}
+               </xmp></div>
+    <div class="experiment_3">
+        <h3>playfair cipher code</h3>
+        <xmp>
+import java.util.Scanner;
+
+public class PlayfairCipher {
+
+    private String key;
+    private char[][] matrix;
+
+    public PlayfairCipher(String key) {
+        // Constructor: Initializes the PlayfairCipher with a given key.
+        setKey(key);
+    }
+
+    public void setKey(String key) {
+        // Sets the encryption key for the PlayfairCipher.
+        key = key.toUpperCase().replaceAll("[^A-Z]", ""); // Convert to uppercase and remove non-alphabetic characters.
+        this.key = key;
+        createMatrix(); // Create the encryption matrix based on the key.
+    }
+
+    private void createMatrix() {
+        // Creates a 5x5 matrix for encryption using the key.
+        boolean[] used = new boolean[26];
+        matrix = new char[5][5];
+        int row = 0, col = 0;
+
+        // Fill the matrix with unique letters from the key.
+        for (int i = 0; i < key.length(); i++) {
+            char letter = key.charAt(i);
+            if (!used[letter - 'A']) {
+                matrix[row][col] = letter;
+                used[letter - 'A'] = true;
+                col++;
+                if (col == 5) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+
+        // Fill the matrix with the remaining letters of the alphabet.
+        for (char letter = 'A'; letter <= 'Z'; letter++) {
+            if (letter != 'J' && !used[letter - 'A']) {
+                matrix[row][col] = letter;
+                col++;
+                if (col == 5) {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+    }
+
+    private String preprocess(String plaintext) {
+        // Preprocesses the plaintext before encryption.
+        plaintext = plaintext.toUpperCase().replaceAll("[^A-Z]", ""); // Convert to uppercase and remove non-alphabetic
+        plaintext = plaintext.replaceAll("J", "I"); // Replace 'J' with 'I'.
+
+        StringBuilder processed = new StringBuilder(plaintext);
+        for (int i = 1; i < processed.length(); i += 2) {
+            if (processed.charAt(i) == processed.charAt(i - 1)) {
+                processed.insert(i, 'X'); // Insert 'X' between repeated letters.
+            }
+        }
+
+        // If the length is odd, add an 'X' at the end to ensure even pairs.
+        if (processed.length() % 2 != 0) {
+            processed.append('X');
+        }
+
+        return processed.toString();
+    }
+
+    public String encrypt(String plaintext) {
+        // Encrypts the given plaintext using the PlayfairCipher.
+        plaintext = preprocess(plaintext); // Preprocess the plaintext.
+        StringBuilder ciphertext = new StringBuilder();
+
+        for (int i = 0; i < plaintext.length(); i += 2) {
+            char a = plaintext.charAt(i);
+            char b = plaintext.charAt(i + 1);
+
+            int[] posA = findPosition(a);
+            int[] posB = findPosition(b);
+
+            int rowA = posA[0];
+            int colA = posA[1];
+            int rowB = posB[0];
+            int colB = posB[1];
+
+            char encryptedA, encryptedB;
+
+            if (rowA == rowB) {
+                encryptedA = matrix[rowA][(colA + 1) % 5];
+                encryptedB = matrix[rowB][(colB + 1) % 5];
+            } else if (colA == colB) {
+                encryptedA = matrix[(rowA + 1) % 5][colA];
+                encryptedB = matrix[(rowB + 1) % 5][colB];
+            } else {
+                encryptedA = matrix[rowA][colB];
+                encryptedB = matrix[rowB][colA];
+            }
+
+            ciphertext.append(encryptedA).append(encryptedB); // Append the encrypted pairs.
+        }
+
+        return ciphertext.toString();
+    }
+
+    public String decrypt(String ciphertext) {
+        // Decrypts the given ciphertext using the PlayfairCipher.
+        StringBuilder plaintext = new StringBuilder();
+
+        for (int i = 0; i < ciphertext.length(); i += 2) {
+            char a = ciphertext.charAt(i);
+            char b = ciphertext.charAt(i + 1);
+
+            int[] posA = findPosition(a);
+            int[] posB = findPosition(b);
+
+            int rowA = posA[0];
+            int colA = posA[1];
+            int rowB = posB[0];
+            int colB = posB[1];
+
+            char decryptedA, decryptedB;
+
+            if (rowA == rowB) {
+                decryptedA = matrix[rowA][(colA + 4) % 5];
+                decryptedB = matrix[rowB][(colB + 4) % 5];
+            } else if (colA == colB) {
+                decryptedA = matrix[(rowA + 4) % 5][colA];
+                decryptedB = matrix[(rowB + 4) % 5][colB];
+            } else {
+                decryptedA = matrix[rowA][colB];
+                decryptedB = matrix[rowB][colA];
+            }
+
+            plaintext.append(decryptedA).append(decryptedB); // Append the decrypted pairs.
+        }
+
+        return plaintext.toString();
+    }
+
+    private int[] findPosition(char letter) {
+        // Finds the position (row and column) of a letter in the matrix.
+        int[] pos = new int[2];
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (matrix[i][j] == letter) {
+                    pos[0] = i;
+                    pos[1] = j;
+                    return pos;
+                }
+            }
+        }
+
+        return pos;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the encryption key: "); // Prompt for key
+        String key = sc.nextLine(); // Read the key from user input
+        PlayfairCipher playfair = new PlayfairCipher(key); // Initialize PlayfairCipher with the user-provided key
+        System.out.print("Enter the plain text: ");
+        String plaintext = sc.nextLine();
+        String ciphertext = playfair.encrypt(plaintext);
+        String decryptedText = playfair.decrypt(ciphertext);
+        System.out.println("Ciphertext: " + ciphertext);
+        System.out.println("Decrypted Text: " + decryptedText);
+    }
+}
+
+        </xmp>
+    </div>
+    <div class="experiment_4">
+        <h3>des code</h3>
+        <xmp>
+            
+//Java classes that are mandatory to import for encryption and decryption process   
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+
+public class des {
+    // creating an instance of the Cipher class for encryption
+    private static Cipher encrypt;
+    // creating an instance of the Cipher class for decryption
+    private static Cipher decrypt;
+    // initializing vector
+    private static final byte[] initialization_vector = { 22, 33, 11, 44, 55, 99, 66, 77 };
+
+    // main() method
+    public static void main(String[] args) {
+        // path of the file that we want to encrypt
+        String textFile = "C:/Users/VIPIN KUMAR PAL/Desktop/demo.txt";
+        // path of the encrypted file that we get as output
+        String encryptedData = "C:/Users/VIPIN KUMAR PAL/Desktop/encrypteddata.txt";
+        // path of the decrypted file that we get as output
+        String decryptedData = "C:/Users/VIPIN KUMAR PAL/Desktop/decrypteddata.txt";
+        try {
+            // generating keys by using the KeyGenerator class
+            SecretKey scrtkey = KeyGenerator.getInstance("DES").generateKey();
+            AlgorithmParameterSpec aps = new IvParameterSpec(initialization_vector);
+            // setting encryption mode
+            encrypt = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            encrypt.init(Cipher.ENCRYPT_MODE, scrtkey, aps);
+            // setting decryption mode
+            decrypt = Cipher.getInstance("DES/CBC/PKCS5Padding");
+            decrypt.init(Cipher.DECRYPT_MODE, scrtkey, aps);
+            // calling encrypt() method to encrypt the file
+            encryption(new FileInputStream(textFile), new FileOutputStream(encryptedData));
+            // calling decrypt() method to decrypt the file
+            decryption(new FileInputStream(encryptedData), new FileOutputStream(decryptedData));
+            // prints the stetment if the program runs successfully
+            System.out.println("The encrypted and decrypted files have been created successfully.");
+        }
+        // catching multiple exceptions by using the | (or) operator in a single catch
+        // block
+        catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
+                | InvalidAlgorithmParameterException | IOException e) {
+            // prints the message (if any) related to exceptions
+            e.printStackTrace();
+        }
+    }
+
+    // method for encryption
+    private static void encryption(InputStream input, OutputStream output)
+            throws IOException {
+        output = new CipherOutputStream(output, encrypt);
+        // calling the writeBytes() method to write the encrypted bytes to the file
+        writeBytes(input, output);
+    }
+
+    // method for decryption
+    private static void decryption(InputStream input, OutputStream output)
+            throws IOException {
+        input = new CipherInputStream(input, decrypt);
+        // calling the writeBytes() method to write the decrypted bytes to the file
+        writeBytes(input, output);
+    }
+
+    // method for writting bytes to the files
+    private static void writeBytes(InputStream input, OutputStream output)
+            throws IOException {
+        byte[] writeBuffer = new byte[512];
+        int readBytes = 0;
+        while ((readBytes = input.read(writeBuffer)) >= 0) {
+            output.write(writeBuffer, 0, readBytes);
+        }
+        // closing the output stream
+        output.close();
+        // closing the input stream
+        input.close();
+    }
+}
+
+note 
+
+Before running the above program, you will have to do some changes in the program. First, you will have to create a text file that you want to encrypt. In our case, we have created a file with the name demo.txt and written the following text into it. You can write anything.
+
+When we run the above program, it generates the two files encrypteddata.txt and deecrypteddata.txt at the specified location. Let's see what inside the encrypted and decrypted file.   
+
+</xmp>
+    </div>
+    <div class="experiment_5">
+        <h3>rsa code</h3>
+        <xmp>
+import java.math.*;
+import java.util.*;
+
+public class rsa {
+    public static int getGCD(int mod, int num) {
+        // If the mod is zero, return the num
+        if (mod == 0)
+            return num;
+        else
+            // recursive function call
+            return getGCD(num % mod, mod);
+    }
+
+    public static void main(String args[]) {
+        int d = 0, e; // Intialization
+        int message = 32; // number message
+        int prime1 = 5; // 1st prime number p
+        int prime2 = 7; // 2nd prime number q
+        int primeMul = prime1 * prime2; // performing operations
+        int primeMul1 = (prime1 - 1) * (prime2 - 1);
+        System.out.println("primeMul1 is equal to : " + primeMul1 + "\n");
+        // Finding the valid public key
+        for (e = 2; e < primeMul1; e++) {
+            // Here e is a public key
+            if (getGCD(e, primeMul1) == 1) {
+                break;
+            }
+        }
+        // Printing the public key
+        System.out.println("Public key e is = " + e);
+        // Calculating the private key
+        for (int m = 0; m <= 9; m++) {
+            // get the value of temp
+            int temp = 1 + (m * primeMul1);
+            // private key
+            if (temp % e == 0) {
+                d = temp / e;
+                break;
+            }
+        }
+        System.out.println("d is : " + d);
+        double cipher;
+        BigInteger d_message;
+        // getting the cipher text
+        cipher = (Math.pow(message, e)) % primeMul;
+        System.out.println("Cipher text is : " + cipher);
+        // Int to BigInteger
+        BigInteger bigN = BigInteger.valueOf(primeMul);
+        // Float to bigINt
+        BigInteger bigC = BigDecimal.valueOf(cipher).toBigInteger();
+        // decrypting the message
+        d_message = (bigC.pow(d)).mod(bigN);
+        // print decrypted message
+        System.out.println("Decrypted text is : " + d_message);
+    }
+}
+        </xmp>
+    </div>
+    <div class="experiment_6"></div>
+    <div class="experiment_7"></div>
+</body>
+</html>
